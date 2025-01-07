@@ -1,32 +1,40 @@
-# Simple Library MERN App
+# A simple MERN stack application 
 
-<p>
-  <a href="https://twitter.com/AlphaOmondi" target="_blank">
-    <img alt="Twitter: AlphaOmondi" src="https://img.shields.io/twitter/follow/AlphaOmondi.svg?style=social" />
-  </a>
-</p>
+### Create a network for the docker containers
 
-👋 This simple Library MERN Book Application built to demonstrate how The MERN stack can be used with Docker and NGINX
+`docker network create demo`
 
-## Run the Application
+### Build the client 
 
-```
-git clone https://github.com/API-Imperfect/mern_library_nginx.git
-cd mern_library_nginx
-cd server
-run the command: make build
-navigate to localhost:8080
+```sh
+cd mern/frontend
+docker build -t mern-frontend .
 ```
 
-If you prefer not using Make files
+### Run the client
 
+`docker run --name=frontend --network=demo -d -p 5173:5173 mern-frontend`
+
+### Verify the client is running
+
+Open your browser and type `http://localhost:5173`
+
+### Run the mongodb container
+
+`docker run --network=demo --name mongodb -d -p 27017:27017 -v ~/opt/data:/data/db mongodb:latest`
+
+### Build the server
+
+```sh
+cd mern/backend
+docker build -t mern-backend .
 ```
-git clone https://github.com/API-Imperfect/mern_library_nginx.git
-cd mern_library_nginx
-run the command: docker-compose up --build --remove-orphans
-navigate to localhost:8080
-```
 
-## License
+### Run the server
 
-MIT
+`docker run --name=backend --network=demo -d -p 5050:5050 mern-backend`
+
+## Using Docker Compose
+
+`docker compose up -d`
+
